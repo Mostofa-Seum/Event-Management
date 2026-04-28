@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EventManagement.Data\EventManagement.Data.csproj" />
     <ProjectReference Include="..\EventManagement.Entities\EventManagement.Entities.csproj" />
+    <ProjectReference Include="..\EventManagement.Repos\EventManagement.Repos.csproj" />
   </ItemGroup>
 
 </Project>

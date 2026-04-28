@@ -1,4 +1,5 @@
 using EventManagement.Data;
+using EventManagement.Repos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EmDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Event_Management")));
+builder.Services.AddScoped<EventTypeRepo>();
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
