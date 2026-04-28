@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventManagement.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagement.Web.Controllers
 {
-    public class EventTypeController : Controller
+    public class EventTypeController(EmDbContext context) : Controller
     {
         public IActionResult Index()
         {
-            return Content("Event Type Index");
+            return Content(context.EventTypes.ToList().Count.ToString());
         }
     }
 }
