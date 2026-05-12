@@ -1,19 +1,77 @@
 ﻿using EventManagement.Data;
 using EventManagement.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EventManagement.Shared;
+
 
 namespace EventManagement.Repos
 {
     public class EventTypeRepo(EmDbContext context)
     {
-        public List<EventType> GetAll()
+        public Result<List<EventType>> GetAll()
         {
-            return context.EventTypes.ToList();
+            var result = new Result<List<EventType>>();
+            try
+            {
+                result.Data = _context.EventTypes.ToList();
+            }
+            catch (Exception e)
+            {
+                result.HasError = true;
+                result.Message = e.Message;
+            }
+
+            return result;
         }
 
+        public Result<EventType?> GetById(int id)
+        {
+            var result = new Result<EventType?>();
+            try
+            {
+                result.Data = _context.EventTypes.FirstOrDefault(e => e.Id == id);
+            }
+            catch (Exception e)
+            {
+                result.HasError = true;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
+
+        public Result<EventType> Save(EventType model)
+        {
+            var result = new Result<EventType>();
+            try
+            {
+                if(context.EventTypes.Any(e=>e.Title == model.Title))
+                {
+                    result.HasError = true;
+                    result.Message = "Event type with the same title already exists.";
+                    return result;
+                }
+                var objToSave = context.EventTypes.Find(model.Id);
+
+                if (objToSave == null)
+                {
+                    objToSave = new EventType();
+                    context.EventTypes.Add(objToSave);
+                }
+                objToSave.Title = model.Title;
+                objToSave.Description = model.Description;
+
+                objToSave.UpdatedAt = DateTime.Now;
+                objToSave.UpdatedBy = 1; //TODO: get from session
+
+                context.SaveChanges();
+                result.Data = objToSave;
+            }
+            catch (Exception e)
+            {
+                result.HasError = true;
+                result.Message = e.Message;
+            }
+            return result;
+        }
     }
 }
