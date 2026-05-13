@@ -24,12 +24,43 @@ namespace EventManagement.Web.Controllers
             }
 
             var result = eventTypeRepo.GetById(dataId);
+            if (result.HasError || result.Data == null)
+            {
+                TempData["Error"] = result.Message ?? "Event type not found.";
+                return RedirectToAction("Index");
+            }
             if (result.HasError)
             {
                 TempData["Error"] = result.Message;
                     return RedirectToAction("Index");
             }
             return View(result.Data);
+        }
+
+        [HttpPost]
+        public IActionResult Detail(EventType model)
+        {
+            ModelState.Remove("UpdatedAt");
+            ModelState.Remove("UpdatedBy");
+            if (ModelState.IsValid == false)
+            {
+                return View(model);
+            }
+            else
+            {
+                var result = eventTypeRepo.Save(model);
+                if (result.HasError)
+                {
+                    TempData["Error"] = result.Message;
+                }
+                else
+                {
+                    TempData["Success"] = $"Data #{result.Data} saved successfully.";
+                    return RedirectToAction("Index");
+                }
+                return View(result.Data);
+                
+            }
         }
 
         public IActionResult Delete(int dataId)
