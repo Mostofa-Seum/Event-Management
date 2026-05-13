@@ -52,6 +52,7 @@ namespace EventManagement.Web.Controllers
                 if (result.HasError)
                 {
                     TempData["Error"] = result.Message;
+                    return View(model);
                 }
                 else
                 {

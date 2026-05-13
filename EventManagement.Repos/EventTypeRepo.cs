@@ -44,7 +44,7 @@ namespace EventManagement.Repos
             var result = new Result<EventType>();
             try
             {
-                if (context.EventTypes.Any(e => e.Title == model.Title))
+                if (context.EventTypes.Any(e => e.Title == model.Title && e.Id != model.Id))
                 {
                     result.HasError = true;
                     result.Message = "Event type with the same title already exists.";
@@ -59,6 +59,7 @@ namespace EventManagement.Repos
                 }
                 objToSave.Title = model.Title;
                 objToSave.Description = model.Description;
+                objToSave.IsActive = model.IsActive;
 
                 objToSave.UpdatedAt = DateTime.Now;
                 objToSave.UpdatedBy = 1; //TODO: get from session

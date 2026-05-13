@@ -10,5 +10,6 @@ namespace EventManagement.Data
         }
 
         public DbSet<EventType> EventTypes { get; set; } = null!;
+        public DbSet<EventLocation> EventLocations { get; set; } = null!;
     }
 }
