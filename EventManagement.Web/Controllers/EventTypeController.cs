@@ -1,7 +1,7 @@
 ﻿using EventManagement.Data;
 using EventManagement.Repos;
 using Microsoft.AspNetCore.Mvc;
-
+using EventManagement.Entities;
 namespace EventManagement.Web.Controllers
 {
     public class EventTypeController(EventTypeRepo eventTypeRepo) : Controller
@@ -12,6 +12,22 @@ namespace EventManagement.Web.Controllers
             if (result.HasError)
             {
                 ViewBag.ErrorMessage = result.Message;
+            }
+            return View(result.Data);
+        }
+
+        public IActionResult Detail(int dataId)
+        {
+            if(dataId == -1)
+            {
+                return View(new EventType());
+            }
+
+            var result = eventTypeRepo.GetById(dataId);
+            if (result.HasError)
+            {
+                TempData["Error"] = result.Message;
+                    return RedirectToAction("Index");
             }
             return View(result.Data);
         }

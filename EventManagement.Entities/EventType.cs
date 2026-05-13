@@ -15,5 +15,6 @@ namespace EventManagement.Entities
         public string Description { get; set; } = null!; 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public int UpdatedBy { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }
